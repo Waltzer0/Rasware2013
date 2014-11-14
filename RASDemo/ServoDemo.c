@@ -3,10 +3,11 @@
 #include <RASLib/inc/common.h>
 #include <RASLib/inc/servo.h>
 
-tServo *servo;
+#include "motor.h"
 
 void initServo(void) {
     servo = InitializeServo(PIN_B0);
+	  servo = InitializeServo(PIN_B1);
 }
 
 void servoDemo(void) {
