@@ -30,55 +30,46 @@ int main(void) {
 	float Wall_Left = 0;
 	float Wall_Right = 0;
 	left = InitializeServoMotor(PIN_B0, false);
-  right = InitializeServoMotor(PIN_E4, false);
-				 while(1){
-				SetMotor(right,0.0);
-				SetMotor(left,0.5);
-				blink();
-				Wait(.05);
-			 }
-	//SetMotor(left, 0.5);
-	SetMotor(right,0.5);
-		adc[0] = InitializeADC(PIN_D0);
-    adc[1] = InitializeADC(PIN_D1);
-    adc[2] = InitializeADC(PIN_D2);
-    adc[3] = InitializeADC(PIN_D3);
+  right = InitializeServoMotor(PIN_B1, true);
+
+	adc[0] = InitializeADC(PIN_D0);
+	adc[1] = InitializeADC(PIN_D1);
+  adc[2] = InitializeADC(PIN_D2);
+  adc[3] = InitializeADC(PIN_D3);
 		//InitializeADC(PIN_C0);
 
-		adc2[0] = InitializeADC(PIN_E0);
-    adc2[1] = InitializeADC(PIN_E1);
-    adc2[2] = InitializeADC(PIN_E2);
-    adc2[3] = InitializeADC(PIN_E3);
+	adc2[0] = InitializeADC(PIN_E0);
+  adc2[1] = InitializeADC(PIN_E1);
+  adc2[2] = InitializeADC(PIN_E2);
+  adc2[3] = InitializeADC(PIN_E3);
 
-
-
-		
-     while(1) {
-
-			 SetMotor(right,0.5);
-					SetMotor(left,0.5);
-				blink();
-				Wait(.05);
-        ADCValue = ADCRead(adc[0]);
-        Printf("IR values: %d\n", (int)(1000 * ADCValue));
-        ADCValue2 = ADCRead(adc2[0]);
-        Printf("IR values: %d\n", (int)(1000 * ADCValue2));				
-				if(ADCValue>=.4||ADCValue2>=.4){
-					SetMotor(left,0.0);
-					SetMotor(right,0.0);
-				}
-				else if(ADCValue<=.3){
+	while(1) {
+		while(1){
 					SetMotor(right,0.5);
 					SetMotor(left,0.5);
-				}
-				else{
-					SetMotor(right,0.5);
-					SetMotor(left,0.5);
-				}
-    }
-  
+					blink();
+					Wait(.05);
+		}
 	
-  
-
-        
-    }
+		blink();
+		Wait(.05);
+    ADCValue = ADCRead(adc[0]);
+    Printf("IR values: %d\n", (int)(1000 * ADCValue));  //Left IR sensor
+    ADCValue2 = ADCRead(adc2[0]);
+    Printf("IR values: %d\n", (int)(1000 * ADCValue2));	//Right IR sensor
+		if(ADCValue >= .5 && ADCValue2 >= .5){
+			SetMotor(right , 0.0);
+			SetMotor(left , 0.0);
+		}else if(ADCValue >= .4 && ADCValue2 < .4){		//object to the left, but nothing to the right so turn right
+			SetMotor(right , 0.5);
+			SetMotor(left , 0.0);
+		}else if(ADCValue2 >= .4 && ADCValue < .4){	//object to the right, but nothing to the left so turn left
+			SetMotor(right , 0.0);
+			SetMotor(left , 0.5);			
+		}else{
+			SetMotor(right , 0.5);
+			SetMotor(left , 0.5);
+		}
+	}
+ }
+ 
